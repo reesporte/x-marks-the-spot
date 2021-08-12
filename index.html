@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <title>x marks the spot</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,9 +11,7 @@
         }
     </style>
 </head>
-
 <body>
-    
     <h2>The Game || use the arrow keys to move || press x to reset || points: <span id="points">0</span></h2>
     <div id="game" style="border: 1px dotted white;">
         <span id="player-circle" style="font-size: xx-large; font-weight: bold;">O</span>
@@ -85,26 +82,19 @@
                 default:
                     return;
             }
-
             event.preventDefault();
-
             if (Math.abs(spotOnBoard[0] - xOnBoard[0]) <= speed / 2 && Math.abs(spotOnBoard[1] - xOnBoard[1]) <= speed / 2) {
                 spotOnBoard = randomLocation();
                 xOnBoard = randomLocation();
-
                 x.style.left = xOnBoard[0] + 'px';
                 x.style.top = xOnBoard[1] + 'px';
-
                 points += 1;
                 pointsMessage.innerHTML = points;
             }
-
             player.style.left = spotOnBoard[0] + 'px';
             player.style.top = spotOnBoard[1] + 'px';
         }
-
         document.addEventListener('keydown', function (event) { nextSpotOnBoard(event, location) }, true)
     </script>
 </body>
-
 </html>
