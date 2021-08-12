@@ -11,5 +11,5 @@ run: game
 clean: 
 	rm game 
 
-install: build
+install: game
 	cp game /usr/local/bin
