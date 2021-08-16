@@ -8,7 +8,7 @@
 #define MAX_WIDTH 80
 #define MAX_HEIGHT 20
 
-bool nextLocation(int* location);
+int nextLocation(int* location);
 void randomLocation(int* location);
 
 int main(int argc, char* argv[]) {
@@ -17,6 +17,8 @@ int main(int argc, char* argv[]) {
     int location[2] = {MAX_WIDTH / 2, MAX_HEIGHT / 2};
     int randomSpot[2] = {0, 0};
     int points = 0;
+    int moves = 0;
+    int moved = 0;
 
     initscr();
     clear();
@@ -26,7 +28,7 @@ int main(int argc, char* argv[]) {
     curs_set(0);
 
     int none[2] = {0, 0};
-    while (nextLocation(none)) {
+    while (nextLocation(none) != -1) {
         clear();
         mvprintw(MAX_HEIGHT / 2, MAX_WIDTH / 2, "welcome to The Game!");
         mvprintw(MAX_HEIGHT / 2 + 1, MAX_WIDTH / 2 - 15, "the object of the game is to get as many points as you can.");
@@ -36,16 +38,16 @@ int main(int argc, char* argv[]) {
 
     randomLocation(randomSpot);
 
-    while (nextLocation(location)) {
+    while (moved = nextLocation(location), moved != -1) {
         clear();
-        char message[90] = "The Game || use the arrow keys to move || press x to exit || points: ";
-        char strPoints[12];
-        sprintf(strPoints, "%d", points);
-        strncat(message, strPoints, 12);
+        char message[90];
+        sprintf(message, "The Game || use the arrow keys to move || press x to exit || points: %d || moves: %d", points, moves);
 
         mvprintw(0, 0, message);
         mvprintw(randomSpot[1], randomSpot[0], "X");
         mvprintw(location[1], location[0], "O");
+
+        moves += moved == 0;
 
         if (location[1] == randomSpot[1] && location[0] == randomSpot[0]) {
             points++;
@@ -63,9 +65,9 @@ int main(int argc, char* argv[]) {
 }
 
 // nextLocation sets location according to key input, and returns true if key input != x
-bool nextLocation(int* location) {
+int nextLocation(int* location) {
     int ch;
-    bool retval = true;
+    int retval = 1;
     if ((ch = getch()) != ERR) {
         switch (ch) {
             case KEY_LEFT:
@@ -74,6 +76,7 @@ bool nextLocation(int* location) {
                 } else {
                     location[0] = MAX_WIDTH - 1;
                 }
+                retval = 0;
                 break;
             case KEY_RIGHT:
                 if (location[0] + 1 < MAX_WIDTH) {
@@ -81,6 +84,7 @@ bool nextLocation(int* location) {
                 } else {
                     location[0] = 1;
                 }
+                retval = 0;
                 break;
             case KEY_UP:
                 if (location[1] - 1 > 0) {
@@ -88,6 +92,7 @@ bool nextLocation(int* location) {
                 } else {
                     location[1] = MAX_HEIGHT - 1;
                 }
+                retval = 0;
                 break;
             case KEY_DOWN:
                 if (location[1] + 1 < MAX_HEIGHT) {
@@ -95,9 +100,11 @@ bool nextLocation(int* location) {
                 } else {
                     location[1] = 1;
                 }
+                retval = 0;
                 break;
             case 120:  // X key
-                retval = false;
+                retval = -1;
+                break;
         }
     }
     return retval;
